@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: "Arial", sans-serif;
+          font-size: 18px;
+          line-height: 1.6;
+          margin: 0;
+          padding: 0;
+          background-color: #f4f4f4;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+
+        main {
+          max-width: 800px;
+          width: 90%;
+          padding: 20px;
+          border: 2px solid #ccc;
+          border-radius: 10px;
+          background-color: #fff;
+        }
+
+        h1 {
+          text-align: center;
+          color: #333;
+        }
+
+        form {
+          text-align: center;
+        }
+
+        input[type="text"] {
+          width: calc(100% - 22px);
+          padding: 15px;
+          margin: 15px 0;
+          border: 2px solid #ccc;
+          border-radius: 10px;
+        }
+
+        button {
+          width: calc(100% - 22px);
+          padding: 15px;
+          margin: 15px 0;
+          border: none;
+          border-radius: 10px;
+          background-color: #4CAF50;
+          color: white;
+          cursor: pointer;
+        }
+
+        button:hover {
+          background-color: #45a049;
+        }
+
+        section {
+          margin-top: 20px;
+          text-align: center;
+          background-color: #f9f9f9;
+          padding: 20px;
+          border: 2px solid #ccc;
+          border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>URL Shortener</h1>
+        <form method="post" action="{% url 'shortener:create' %}">
+            {% csrf_token %}
+            <input type="text" name="link" placeholder="Enter URL here">
+            <button type="submit">Shorten</button>
+        </form>
+        <section id="section">
+            <h2></h2>
+        </section> 
+    </main>
+    <script type="text/javascript">
+        $(document).on('submit','#post-form',function(e){
+          e.preventDefault();
+      
+          $.ajax({
+            type:'POST',
+            url:'/create',
+            data:{
+              link:$('#link').val(),
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function(data){
+              $('#section h2').html("localhost:8000/" + data);
+            }
+          });
+        });
+    </script>
+</body>
+</html>
